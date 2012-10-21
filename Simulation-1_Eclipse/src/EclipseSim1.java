@@ -58,8 +58,7 @@ public class EclipseSim1 {
 
         
         //Decris le programme a l'utilisateur
-        System.out.println( "\n\n" );
-        System.out.println( "==========================================================================================" );
+        System.out.println( "\n==========================================================================================" );
         System.out.println( "Ce programme facture les forfaits vacance/plein air avec ou sans rabais selon le cas et" ); 
         System.out.println( "affiche un bilan des differentes executions a la fermeture du programme\n" );//presentation du programme
         System.out.println( "------------------------------------------------------------------------------------------" );
@@ -81,31 +80,39 @@ public class EclipseSim1 {
             System.out.print( "Nombre de participant(s) ......: " );//car mumero de client valide
             nbParticipant = Clavier.lireInt();//pour entrer le nombre de participant
         
-            while (nbParticipant <= 0){ 
+            while (nbParticipant < 0){ 
                 System.out.println( "ERREUR!");//nombre invalide
                 System.out.print( "Nombre de participant(s) ......: " );
                 nbParticipant = Clavier.lireInt();//pour entrer un nouveau nombre
             }
             
-            if( nbParticipant > 0){ 
-                System.out.print( "Durée de l'activité ...........: ");//nombre valide
-                dureeActivite = Clavier.lireInt();//pour entrer une duree
+            //Pour permettre a l'utilisateur de quitter en entrant "0" comme nbParticipant
+            //if (nbParticipant <= 0){
+            //        System.out.println( "Numéro de client ..............: " + numClient );
+            //        System.out.println( "FACTURE ANNULEE" );
+            //        nbFacture = nbFacture - 1;  
+            if( nbParticipant >= 0){ 
+                   
+                if( nbParticipant > 0){ 
+                    
+                    System.out.print( "Durée de l'activité ...........: ");//nombre valide
+                    dureeActivite = Clavier.lireInt();//pour entrer une duree
                 
-                while (dureeActivite < 0){
-                    System.out.println( "ERREUR! Duree invalide." );// duree invalide
-                    System.out.print("Durée de l'activité ...........: ");   
-                    dureeActivite = Clavier.lireInt();//pour entrer une nouvelle duree  
+                    while (dureeActivite < 0){
+                        System.out.println( "ERREUR! Duree invalide." );// duree invalide
+                        System.out.print("Durée de l'activité ...........: ");   
+                        dureeActivite = Clavier.lireInt();//pour entrer une nouvelle duree  
+                    }
+                
+                    //Calcul du prix de base sans aucun rabais
+                    if (dureeActivite > 0){
+                        prixSansRabais = 50 * nbParticipant * dureeActivite;
+                    }
                 }
-                
-                //Calcul du prix de base sans aucun rabais
-                if (dureeActivite > 0){
-                    prixSansRabais = 50 * nbParticipant * dureeActivite;
-                }
-                
                 //Defini le prix de l'activite avant le rabais et les taxes  
-                if (dureeActivite == 0){
-                    System.out.println( "Numéro de client ..............: " + numClient );
-                    System.out.println( "FACTURE ANNULEE" );
+                if (dureeActivite == 0 || nbParticipant == 0){
+                    System.out.println( "\nNuméro de client ..............: " + numClient );
+                    System.out.println( "\nFACTURE ANNULEE" );
                     nbFacture = nbFacture - 1;
                 }else if (dureeActivite == 1 && nbParticipant < 5){
                     montantAvantTaxesEtRabais = 50 * nbParticipant;
@@ -179,8 +186,7 @@ public class EclipseSim1 {
                 }
                 
                 //Demande a l'utilisateur s'il veut continuer d'entrer des factures
-                System.out.println( "\n" );
-                System.out.println( "==========================================================================================" );
+                System.out.println( "\n==========================================================================================" );
                 System.out.println( "Ce programme facture les forfaits vacance/plein air avec ou sans rabais selon le cas et" ); 
                 System.out.println( "affiche un bilan des differentes executions a la fermeture du programme\n" );//presentation du programme
                 System.out.println( "------------------------------------------------------------------------------------------" );
