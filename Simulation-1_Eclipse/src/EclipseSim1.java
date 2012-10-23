@@ -1,12 +1,14 @@
 /*
  * Cours INF6150
  *
+ *
  * Projet
  * ------
  * Le projet 'Facturation forfait plein air' vise une clientele qui souhaite
- * reserver des forfaits vacances en plein air pour différentes activites.
+ * reserver des forfaits vacances en plein air pour differentes activites.
  * Il consiste a ameliorer le processus de facturation et la flexibilite du logiciel en
  * integrant de nouvelles regles ayant trait aux taxes et aux rabais.
+ *
  * 
  * Equipe
  * ------
@@ -15,10 +17,50 @@
  * Karl Brodeur    BROK09028701
  * Samira Feddag   FEDS04518206
  * Abdelilah Naimi NAIA16015901
+ *
  * 
  * Description
  * -----------
  * Programme permettant de faire des factures avec des taxes et des rabais.
+ *
+ *
+ * Version 1 (demandes essentielles)
+ * ---------
+ * - Appliquer une taxe harmonisee de 15% en remplacement de la tps et tvq. 
+ * - Appliquer le rabais sur le montant facture avant les taxes.
+ * - Ajouter une nouvelle categorie de client numerotes de 4000 a 4999.
+ * - Les clients numerotes de 4000 a 4999 ont 0% de rabais.
+ * - Les clients numerotes de 3000 a 3999 ont 5% de rabais.
+ * 
+ *
+ * Version 2 (demandes importantes)
+ * ---------
+ * - Cumuler le montant total des rabais de 15%, 10% et 5% et les afficher 
+ *   dans le bilan de fermeture.
+ * - Cumuler le montant total des rabais bases sur la duree des sejours 
+ *   de 1 jour, de 2 jours ou de 3 jours et +. Afficher ses montants 
+ *   dans le bilan de fermeture.
+ * 
+ *
+ * Version 3 (demandes Souhaitables)
+ * ---------
+ * - Permettre d'annuler une facture au moment d'entrer le nombre de 
+ *   participants.
+ * - Ameliorer la clarte de l'affichage.
+ * - Ameliorer la qualite des commentaires.
+ * - Ameliorer la nomenclature des variables.
+ * - Respecter les niveaux d'indentation.
+ * - Supprimer les variables inutilisees.
+ * - Enlever les caracteres nuisant a l'affichage.
+ * 
+ * 
+ * Bogues corriges dans la version originale
+ * -----------------------------------------
+ * - Initialisation incorrecte du nombre de facture. Debuter a 0 au lieu de 1. 
+ * - Calcul erronne pour le premier jour d'activite. S'il y avait entre 2 et 4
+ *   participants, on calculait toujours pour 1 seul participant.
+ * - Calcul erronne du montant total des rabais. Seul le rabais de la derniere
+ *   facture etait cumule.
  * 
  */
 
@@ -51,7 +93,7 @@ public class EclipseSim1 {
         double totalTaxe = 0;                          // Montant total des taxes
         
         // Nombres entiers
-        int dureeActivite = 0;                         // Duree des activités (nb jours)
+        int dureeActivite = 0;                         // Duree des activites (nb jours)
         int nbFacture = 0;                             // Nb de facture
         int nbParticipant = 0;                         // Nb de participant
         int nbRabais0 = 0;                             // Nb de rabais de 0%  
@@ -64,10 +106,10 @@ public class EclipseSim1 {
         // Affichage initial
         System.out.println( "\n==========================================================================================" );
         System.out.println( "Ce programme facture les forfaits vacance/plein air avec ou sans rabais selon le cas et" ); 
-        System.out.println( "affiche un bilan des differentes executions a la fermeture du programme\n" );
+        System.out.println( "affiche à la fin du programme un bilan de fermeture pour toutes les factures entrees.\n" );
         System.out.println( "------------------------------------------------------------------------------------------" );
         System.out.println( "\n" );
-        System.out.print( "Entrer un numero de client ou -1 pour terminer : " );
+        System.out.print( "Entrer un numero de client [-1 = Terminer       ] .: " );
         
         // Saisie [client]
         numClient = Clavier.lireInt();
@@ -80,15 +122,15 @@ public class EclipseSim1 {
         // Saisie incorrecte [client]
         while (numClient >= 0 && numClient < 1000 || numClient > 4999) {
             System.out.println( "ERREUR! Numero de client incorrect." );
-            System.out.print( "Entrer un numéro de client ou -1 pour terminer : " );
+            System.out.print( "Entrer un numero de client [-1 = Terminer       ] .: " );
             
-            // Saisie
+            // Saisie [client]
             numClient = Clavier.lireInt();
         }
         
         // Saisie correcte [client]
         while (numClient >= 1000 && numClient <= 4999) {
-            System.out.print( "Nombre de participant(s) ......: " );
+            System.out.print( "Nombre de participant(s)   [ 0 = Facture annulee] .: " );
             
             // Saisie [participant]
             nbParticipant = Clavier.lireInt();
@@ -96,7 +138,7 @@ public class EclipseSim1 {
             // Saisie incorrecte [participant]
             while (nbParticipant < 0) { 
                 System.out.println( "ERREUR! Nombre de participant(s) incorrect.");
-                System.out.print( "Nombre de participant(s) ......: " );
+                System.out.print( "Nombre de participant(s)   [ 0 = Facture annulee] .: " );
                 
                 // Saisie [participant]
                 nbParticipant = Clavier.lireInt();
@@ -107,7 +149,7 @@ public class EclipseSim1 {
                    
             	// Continuer processus de facturation 
                 if( nbParticipant > 0) { 
-                    System.out.print( "Duree des activites ............: ");
+                    System.out.print( "Duree des activites        [ 0 = Facture annulee] .: ");
 
                     // Saisie [duree activites]
                     dureeActivite = Clavier.lireInt();
@@ -115,7 +157,7 @@ public class EclipseSim1 {
                     // Saisie incorrecte [duree activites]
                     while (dureeActivite < 0) {
                         System.out.println( "ERREUR! Duree des activites incorrecte." );
-                        System.out.print("Duree des activites ............: ");   
+                        System.out.print("Duree des activites        [ 0 = Facture annulee] .: ");   
                         
                        // Saisie [duree activites]
                         dureeActivite = Clavier.lireInt();  
@@ -130,7 +172,7 @@ public class EclipseSim1 {
                 if (dureeActivite == 0 || nbParticipant == 0) {
                     dureeActivite = 0;
                     nbParticipant = 0;
-                    System.out.println( "\nNuméro de client ..............: " + numClient );
+                    System.out.println( "\nNumero de client ..............: " + numClient );
                     System.out.println( "\nFACTURE ANNULEE" );
                 } 
                 
@@ -215,8 +257,8 @@ public class EclipseSim1 {
                 // Affichage d'une facture
                 if (dureeActivite > 0) {
                     System.out.println( "\n      F A C T U R E \n");
-                    System.out.println( "Numéro de client ..............: " + numClient );
-                    System.out.println( "Durée de l'activité ...........: " + dureeActivite + " jour(s)" );
+                    System.out.println( "Numero de client ..............: " + numClient );
+                    System.out.println( "Duree de l'activite ...........: " + dureeActivite + " jour(s)" );
                     System.out.println( "Nombre de participant(s) ......: " + nbParticipant );
                     System.out.println( "\nMontant sans taxe ni rabais ...: $" + montantAvantTaxesEtRabais );
                     System.out.println( "Taxe (15%) ....................: $" + ((double)Math.round(montantTaxe * 100) / 100));
@@ -226,12 +268,9 @@ public class EclipseSim1 {
                 }
                 
                 // Affichage initial
-                System.out.println( "\n==========================================================================================" );
-                System.out.println( "Ce programme facture les forfaits vacance/plein air avec ou sans rabais selon le cas et" ); 
-                System.out.println( "affiche un bilan des differentes executions a la fermeture du programme\n" );//presentation du programme
                 System.out.println( "------------------------------------------------------------------------------------------" );
                 System.out.println( "\n" );
-                System.out.print( "Entrer un numéro de client ou -1 pour terminer : " );
+                System.out.print( "Entrer un numero de client [-1 = Terminer       ] .: " );
                 
                 // Saisie [client]
                 numClient = Clavier.lireInt();
@@ -239,7 +278,7 @@ public class EclipseSim1 {
                 // Saisie incorrecte [client]
                 while (numClient >= 0 && numClient < 1000 || numClient > 4999) {
                     System.out.println( "ERREUR! Numero de client est incorrect." );
-                    System.out.print( "Entrer un numero de client ou -1 pour terminer : " );
+                    System.out.print( "Entrer un numero de client [-1 = Terminer       ] .: " );
                     
                     // Saisie [client]
                     numClient = Clavier.lireInt();
@@ -258,7 +297,7 @@ public class EclipseSim1 {
         // Affichage du bilan de fermeture
         if (nbFacture >= 1 && numClient < 0) {
             System.out.println( "\n\n" );
-            System.out.println( "B I L A N  D E  F E R M E T U R E\n" );
+            System.out.println( "B I L A N   D E   F E R M E T U R E\n" );
             System.out.println( "Nombre de participant(s) .....................: " + nbTotalParticipant);
             System.out.println( "Nombre de rabais de 15% ......................: " + nbRabais15);
             System.out.println( "Nombre de rabais de 10% ......................: " + nbRabais10);
@@ -268,9 +307,9 @@ public class EclipseSim1 {
             System.out.println( "\nMontant de rabais de 15% .....................: $" + ((double)Math.round(totalRabais15 * 100) / 100));
             System.out.println( "Montant de rabais de 10% .....................: $" + ((double)Math.round(totalRabais10 * 100) / 100));
             System.out.println( "Montant de rabais de 5% ......................: $" + ((double)Math.round(totalRabais5 * 100) / 100));
-            System.out.println( "Montant de rabais activités de 1 jour ........: $" + ((double)Math.round(totalRabaisJour1 * 100) / 100) );
-            System.out.println( "Montant de rabais activités de 2 jours .......: $" + ((double)Math.round(totalRabaisJour2 * 100) / 100) );
-            System.out.println( "Montant de rabais activités de 3 jours et + ..: $" + ((double)Math.round(totalRabaisJour3 * 100) / 100) );
+            System.out.println( "Montant de rabais activites de 1 jour ........: $" + ((double)Math.round(totalRabaisJour1 * 100) / 100) );
+            System.out.println( "Montant de rabais activites de 2 jours .......: $" + ((double)Math.round(totalRabaisJour2 * 100) / 100) );
+            System.out.println( "Montant de rabais activites de 3 jours et + ..: $" + ((double)Math.round(totalRabaisJour3 * 100) / 100) );
             
             System.out.println( "Montant total de rabais ......................: $" + ((double)Math.round(totalRabais * 100) / 100));
             System.out.println( "\nRevenu total avec taxe sans rabais ...........: $" + ((double)Math.round(revenuTotalAvecTaxeSansRabais * 100) / 100));
